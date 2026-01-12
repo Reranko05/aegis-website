@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Rajdhani:wght@500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-cyber-black text-gray-300 overflow-x-hidden;
+    font-family: 'Rajdhani', sans-serif;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #080808;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #333;
+    border: 1px solid #c0c0c0;
+  }
+}
+
+@layer components {
+  /* Glitch Text Effect */
+  .glitch-text {
+    position: relative;
+  }
+  .glitch-text::before,
+  .glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #020202;
+  }
+  .glitch-text::before {
+    left: 2px;
+    text-shadow: -1px 0 #708090;
+    clip: rect(24px, 550px, 90px, 0);
+    animation: glitch-anim-2 3s infinite linear alternate-reverse;
+  }
+  .glitch-text::after {
+    left: -2px;
+    text-shadow: -1px 0 #ffffff;
+    clip: rect(85px, 550px, 140px, 0);
+    animation: glitch-anim 2.5s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch-anim {
+    0% { clip: rect(12px, 9999px, 126px, 0); }
+    20% { clip: rect(69px, 9999px, 7px, 0); }
+    40% { clip: rect(12px, 9999px, 81px, 0); }
+    60% { clip: rect(104px, 9999px, 51px, 0); }
+    80% { clip: rect(59px, 9999px, 15px, 0); }
+    100% { clip: rect(101px, 9999px, 11px, 0); }
+  }
+  
+  @keyframes glitch-anim-2 {
+    0% { clip: rect(65px, 9999px, 100px, 0); }
+    20% { clip: rect(81px, 9999px, 34px, 0); }
+    40% { clip: rect(9px, 9999px, 90px, 0); }
+    60% { clip: rect(21px, 9999px, 3px, 0); }
+    80% { clip: rect(138px, 9999px, 30px, 0); }
+    100% { clip: rect(79px, 9999px, 60px, 0); }
+  }
+
+  /* CRT Scanline */
+  .scanline-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      to bottom,
+      transparent 50%,
+      rgba(0,0,0,0.1) 50%
+    );
+    background-size: 100% 4px;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.15;
+  }
+
+  /* Cyber Card */
+  .cyber-card {
+    @apply bg-gray-900/50 border border-gray-800 rounded-lg p-6 relative overflow-hidden;
+    background: rgba(15, 15, 15, 0.9);
+  }
+
+  .cyber-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+  }
+
+  .cyber-card:hover {
+    @apply border-cyber-neon;
+    box-shadow: 0 0 15px rgba(192, 192, 192, 0.2);
+  }
+
+  .cyber-card:hover::before {
+    transform: translateX(100%);
+  }
+
+  /* Cyber Button */
+  .cyber-btn {
+    clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+    transition: all 0.3s ease;
+  }
+
+  .cyber-btn:hover {
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 15px rgba(192, 192, 192, 0.3) inset;
+  }
+
+  /* Active Nav Link */
+  .nav-link.active {
+    @apply text-white border-b-2 border-cyber-neon;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+  }
+}

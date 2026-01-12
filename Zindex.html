@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEGIS SRM | Cyber Sentinel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            black: '#020202',       /* Darker Black */
+                            dark: '#080808',
+                            gray: '#151515',
+                            neon: '#c0c0c0',        /* Silver/Platinum to match Logo */
+                            accent: '#708090',      /* Slate Grey Accent */
+                            green: '#ffffff',       /* White for success */
+                            red: '#8b0000',         /* Dark Red for errors */
+                            dim: 'rgba(192, 192, 192, 0.1)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Rajdhani', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1a1a1a 1px, transparent 1px), linear-gradient(to bottom, #1a1a1a 1px, transparent 1px)",
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'glitch': 'glitch 1s linear infinite',
+                        'scanline': 'scanline 8s linear infinite',
+                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        glitch: {
+                            '2%, 64%': { transform: 'translate(2px,0) skew(0deg)' },
+                            '4%, 60%': { transform: 'translate(-2px,0) skew(0deg)' },
+                            '62%': { transform: 'translate(0,0) skew(5deg)' },
+                        },
+                        scanline: {
+                            '0%': { transform: 'translateY(-100%)' },
+                            '100%': { transform: 'translateY(100%)' }
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #020202;
+            color: #d4d4d4;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar - Silver Theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #080808;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border: 1px solid #c0c0c0;
+        }
+
+        /* Glitch Effect Classes - Silver/White */
+        .glitch-text {
+            position: relative;
+        }
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #020202;
+        }
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -1px 0 #708090; /* Slate Shadow */
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -1px 0 #ffffff; /* White Shadow */
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(12px, 9999px, 126px, 0); }
+            20% { clip: rect(69px, 9999px, 7px, 0); }
+            40% { clip: rect(12px, 9999px, 81px, 0); }
+            60% { clip: rect(104px, 9999px, 51px, 0); }
+            80% { clip: rect(59px, 9999px, 15px, 0); }
+            100% { clip: rect(101px, 9999px, 11px, 0); }
+        }
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            20% { clip: rect(81px, 9999px, 34px, 0); }
+            40% { clip: rect(9px, 9999px, 90px, 0); }
+            60% { clip: rect(21px, 9999px, 3px, 0); }
+            80% { clip: rect(138px, 9999px, 30px, 0); }
+            100% { clip: rect(79px, 9999px, 60px, 0); }
+        }
+
+        /* CRT Scanline Overlay */
+        .scanline-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.1) 50%,
+                rgba(0,0,0,0.1)
+            );
+            background-size: 100% 4px;
+            z-index: 50;
+            pointer-events: none;
+            opacity: 0.2;
+        }
+        
+        .cyber-card {
+            background: rgba(15, 15, 15, 0.9);
+            border: 1px solid #333;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        /* Metallic sheen on hover */
+        .cyber-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .cyber-card:hover {
+            border-color: #c0c0c0;
+            box-shadow: 0 0 15px rgba(192, 192, 192, 0.2);
+        }
+
+        .cyber-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .cyber-btn {
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+            transition: all 0.3s ease;
+        }
+        
+        .cyber-btn:hover {
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 15px rgba(192, 192, 192, 0.3) inset;
+        }
+
+        /* Matrix Canvas */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.1; /* Reduced opacity for cleaner look */
+        }
+        
+        .nav-link.active {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+            border-bottom: 2px solid #c0c0c0;
+        }
+
+        /* Department Expansion Animation */
+        .dept-section {
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        
+        .dept-section.expanded {
+            max-height: 2000px; /* Arbitrary large height */
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="font-sans">
+
+    <!-- CRT Overlay -->
+    <div class="scanline-overlay"></div>
+
+    <!-- Matrix Background -->
+    <canvas id="matrix-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-40 bg-cyber-black/95 backdrop-blur-md border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo Area -->
+                <div class="flex items-center space-x-3 group cursor-pointer" onclick="showSection('home')">
+                    <div class="relative w-10 h-10 overflow-hidden border border-gray-500 rounded-sm p-0.5">
+                        <img src="image_215445.jpg" alt="Aegis Logo" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" onerror="this.src='https://placehold.co/100x100/1a1a1a/c0c0c0?text=AEGIS'">
+                        <div class="absolute inset-0 bg-white/5 mix-blend-overlay"></div>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xl font-bold tracking-wider text-white group-hover:text-cyber-neon transition-colors font-mono glitch-text" data-text="AEGIS SRM">AEGIS SRM</span>
+                        <span class="text-[0.6rem] text-gray-400 uppercase tracking-[0.2em]">Cyber Defense Unit</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 font-mono text-sm">
+                    <button onclick="showSection('home')" class="nav-link text-gray-500 hover:text-white transition-colors tracking-widest uppercase py-1" id="nav-home">
+                        <span class="text-cyber-neon mr-1">></span>Main
+                    </button>
+                    <button onclick="showSection('about')" class="nav-link text-gray-500 hover:text-white transition-colors tracking-widest uppercase py-1" id="nav-about">
+                        <span class="text-cyber-neon mr-1">></span>Intel
+                    </button>
+                    <button onclick="showSection('events')" class="nav-link text-gray-500 hover:text-white transition-colors tracking-widest uppercase py-1" id="nav-events">
+                        <span class="text-cyber-neon mr-1">></span>Ops
+                    </button>
+                    <button onclick="showSection('team')" class="nav-link text-gray-500 hover:text-white transition-colors tracking-widest uppercase py-1" id="nav-team">
+                        <span class="text-cyber-neon mr-1">></span>Unit
+                    </button>
+                    <button onclick="showSection('contact')" class="cyber-btn bg-gray-800 border border-gray-600 text-gray-300 px-6 py-1 hover:bg-gray-700 hover:text-white hover:border-white font-bold uppercase" id="nav-contact">
+                        Join Protocol
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden text-cyber-neon hover:text-white" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-cyber-black border-b border-gray-700 p-4">
+            <div class="flex flex-col space-y-4 font-mono">
+                <button onclick="showSection('home'); toggleMobileMenu()" class="text-left text-gray-400 hover:text-white">_HOME</button>
+                <button onclick="showSection('about'); toggleMobileMenu()" class="text-left text-gray-400 hover:text-white">_ABOUT</button>
+                <button onclick="showSection('events'); toggleMobileMenu()" class="text-left text-gray-400 hover:text-white">_EVENTS</button>
+                <button onclick="showSection('team'); toggleMobileMenu()" class="text-left text-gray-400 hover:text-white">_TEAM</button>
+                <button onclick="showSection('contact'); toggleMobileMenu()" class="text-left text-cyber-neon font-bold">_JOIN_NOW</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="pt-24 min-h-screen relative z-10">
+        
+        <!-- SECTION: HOME -->
+        <section id="home" class="page-section container mx-auto px-6 flex flex-col items-center justify-center min-h-[80vh] text-center">
+            
+            <div class="mb-8 relative group">
+                <!-- Silver Glow -->
+                <div class="absolute -inset-1 bg-gradient-to-r from-gray-500 to-white rounded-full blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+                <div class="relative w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-gray-800 bg-black p-1">
+                    <img src="image_215445.jpg" alt="Aegis Logo" class="w-full h-full object-cover rounded-full opacity-90 hover:opacity-100 transition-opacity hover:scale-105 duration-500" onerror="this.src='https://placehold.co/300x300/1a1a1a/c0c0c0?text=AEGIS'">
+                </div>
+            </div>
+
+            <h1 class="text-5xl md:text-8xl font-bold mb-4 glitch-text font-sans tracking-tighter text-white" data-text="AEGIS SRM">
+                AEGIS SRM
+            </h1>
+            
+            <div class="flex items-center space-x-2 text-gray-400 font-mono text-sm md:text-lg mb-8 bg-gray-900 px-4 py-2 border border-gray-700 rounded">
+                <span class="animate-pulse text-white">●</span>
+                <span id="typing-text">System Status: ONLINE...</span>
+            </div>
+
+            <p class="text-gray-500 max-w-2xl text-lg md:text-xl mb-10 leading-relaxed">
+                The Student Run Organization dedicated to <span class="text-gray-200 font-bold">Cybersecurity</span>, <span class="text-gray-200 font-bold">Ethical Hacking</span>, and <span class="text-gray-200 font-bold">Technical Intelligence</span> at SRMIST.
+            </p>
+
+            <div class="flex flex-col md:flex-row gap-4">
+                <button onclick="showSection('events')" class="cyber-btn bg-white text-black font-bold px-8 py-3 text-lg hover:bg-gray-200 transition-colors">
+                    EXPLORE OPERATIONS
+                </button>
+                <button onclick="showSection('about')" class="cyber-btn border border-gray-600 text-gray-400 px-8 py-3 text-lg hover:border-white hover:text-white transition-colors">
+                    DECRYPT INFO
+                </button>
+            </div>
+            
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 border-t border-gray-800 pt-10 w-full max-w-4xl">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-white font-mono">50+</div>
+                    <div class="text-xs text-gray-500 uppercase tracking-widest mt-1">Events Hosted</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-white font-mono">2k+</div>
+                    <div class="text-xs text-gray-500 uppercase tracking-widest mt-1">Community</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-white font-mono">100%</div>
+                    <div class="text-xs text-gray-500 uppercase tracking-widest mt-1">Student Run</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-white font-mono">24/7</div>
+                    <div class="text-xs text-gray-500 uppercase tracking-widest mt-1">Active</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: ABOUT -->
+        <section id="about" class="page-section hidden container mx-auto px-6 py-12">
+            <div class="flex items-center mb-12">
+                <div class="h-px bg-white w-12 mr-4"></div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white font-sans uppercase tracking-widest">About The Division</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6 text-gray-400 font-mono leading-relaxed">
+                    <p>
+                        <span class="text-cyber-neon font-bold">>_ WHO WE ARE:</span><br>
+                        Aegis SRM is a premier student-run organization at SRM Institute of Science and Technology. Like the mythological shield it is named after, we aim to be the guardians of digital literacy and cybersecurity awareness on campus.
+                    </p>
+                    <p>
+                        <span class="text-cyber-neon font-bold">>_ MISSION DIRECTIVE:</span><br>
+                        We bridge the gap between academic theory and real-world application. Through hands-on workshops, competitive CTFs, and expert seminars, we empower students to navigate and secure the digital frontier.
+                    </p>
+                    <p>
+                        <span class="text-cyber-neon font-bold">>_ DOMAINS:</span>
+                    </p>
+                    <ul class="list-none space-y-2 ml-4">
+                        <li class="flex items-center"><i class="fas fa-shield-alt text-cyber-neon w-6"></i> Cybersecurity & Forensics</li>
+                        <li class="flex items-center"><i class="fas fa-terminal text-cyber-neon w-6"></i> Ethical Hacking</li>
+                        <li class="flex items-center"><i class="fas fa-code text-cyber-neon w-6"></i> Secure Development</li>
+                        <li class="flex items-center"><i class="fas fa-network-wired text-cyber-neon w-6"></i> Networking & IoT</li>
+                    </ul>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="cyber-card p-6 rounded">
+                        <i class="fas fa-chess-knight text-4xl text-gray-300 mb-4"></i>
+                        <h3 class="text-xl font-bold text-white mb-2">Strategy</h3>
+                        <p class="text-sm text-gray-500">Planning and executing complex technical events.</p>
+                    </div>
+                    <div class="cyber-card p-6 rounded">
+                        <i class="fas fa-user-secret text-4xl text-gray-300 mb-4"></i>
+                        <h3 class="text-xl font-bold text-white mb-2">Privacy</h3>
+                        <p class="text-sm text-gray-500">Advocating for data rights and digital anonymity.</p>
+                    </div>
+                    <div class="cyber-card p-6 rounded">
+                        <i class="fas fa-bug text-4xl text-gray-300 mb-4"></i>
+                        <h3 class="text-xl font-bold text-white mb-2">Defense</h3>
+                        <p class="text-sm text-gray-500">Identifying vulnerabilities before they are exploited.</p>
+                    </div>
+                    <div class="cyber-card p-6 rounded">
+                        <i class="fas fa-users text-4xl text-gray-300 mb-4"></i>
+                        <h3 class="text-xl font-bold text-white mb-2">Community</h3>
+                        <p class="text-sm text-gray-500">Building a network of skilled ethical hackers.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: EVENTS -->
+        <section id="events" class="page-section hidden container mx-auto px-6 py-12">
+            <div class="flex items-center mb-12">
+                <div class="h-px bg-white w-12 mr-4"></div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white font-sans uppercase tracking-widest">Operations Log</h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Event 1 -->
+                <div class="cyber-card group">
+                    <div class="h-48 bg-gray-900 overflow-hidden relative">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="CTF" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-60 grayscale hover:grayscale-0">
+                        <div class="absolute top-4 right-4 bg-gray-200 text-black text-xs font-bold px-2 py-1 z-20 font-mono">COMPLETED</div>
+                    </div>
+                    <div class="p-6">
+                        <div class="text-cyber-neon font-mono text-sm mb-2">>Event Loren Ipsum</div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Loren Ipsum</h3>
+                        <p class="text-gray-400 text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+                        <a href="#" class="text-white text-sm hover:text-cyber-neon transition-colors flex items-center">
+                            View Report <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Event 2 -->
+                <div class="cyber-card group">
+                    <div class="h-48 bg-gray-900 overflow-hidden relative">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Workshop" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-60 grayscale hover:grayscale-0">
+                        <div class="absolute top-4 right-4 bg-white text-black text-xs font-bold px-2 py-1 z-20 font-mono">ACTIVE</div>
+                    </div>
+                    <div class="p-6">
+                        <div class="text-cyber-neon font-mono text-sm mb-2">>Workshop Loren Ipsum</div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Ethical Hacking 101</h3>
+                        <p class="text-gray-400 text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+                        <a href="#" class="text-white text-sm hover:text-cyber-neon transition-colors flex items-center">
+                            Register Now <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Event 3 -->
+                <div class="cyber-card group">
+                    <div class="h-48 bg-gray-900 overflow-hidden relative">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Seminar" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-60 grayscale hover:grayscale-0">
+                        <div class="absolute top-4 right-4 bg-gray-600 text-white text-xs font-bold px-2 py-1 z-20 font-mono">UPCOMING</div>
+                    </div>
+                    <div class="p-6">
+                        <div class="text-cyber-neon font-mono text-sm mb-2">SEMINAR Loren Ipsum</div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Loren Ipsum</h3>
+                        <p class="text-gray-400 text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+                        <a href="#" class="text-white text-sm hover:text-cyber-neon transition-colors flex items-center">
+                            Learn More <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: TEAM -->
+        <section id="team" class="page-section hidden container mx-auto px-6 py-12">
+            
+            <!-- High Command -->
+            <div class="flex items-center mb-12">
+                <div class="h-px bg-white w-12 mr-4"></div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white font-sans uppercase tracking-widest">High Command</h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 mb-20 justify-items-center">
+                <!-- President -->
+                <div class="cyber-card p-6 text-center w-full max-w-sm border-t-4 border-t-white">
+                    <div class="w-28 h-28 mx-auto mb-4 rounded-full border-2 border-white bg-gray-800 overflow-hidden">
+                        <img src="https://api.dicebear.com/7.x/initials/svg?seed=KS&backgroundColor=1a1a1a&textColor=ffffff" alt="Avatar" class="w-full h-full">
+                    </div>
+                    <h3 class="text-white font-bold text-xl tracking-wider">Kaushki Sharma</h3>
+                    <div class="mt-2 inline-block bg-white text-black px-3 py-0.5 text-xs font-mono font-bold uppercase">President</div>
+                </div>
+
+                <!-- Vice President -->
+                <div class="cyber-card p-6 text-center w-full max-w-sm border-t-4 border-t-gray-400">
+                    <div class="w-28 h-28 mx-auto mb-4 rounded-full border-2 border-gray-400 bg-gray-800 overflow-hidden">
+                        <img src="https://api.dicebear.com/7.x/initials/svg?seed=HN&backgroundColor=1a1a1a&textColor=c0c0c0" alt="Avatar" class="w-full h-full">
+                    </div>
+                    <h3 class="text-white font-bold text-xl tracking-wider">Harshit Nigam</h3>
+                    <div class="mt-2 inline-block bg-gray-400 text-black px-3 py-0.5 text-xs font-mono font-bold uppercase">Vice President</div>
+                </div>
+
+                <!-- Secretary -->
+                <div class="cyber-card p-6 text-center w-full max-w-sm border-t-4 border-t-gray-400">
+                    <div class="w-28 h-28 mx-auto mb-4 rounded-full border-2 border-gray-400 bg-gray-800 overflow-hidden">
+                        <img src="https://api.dicebear.com/7.x/initials/svg?seed=AA&backgroundColor=1a1a1a&textColor=c0c0c0" alt="Avatar" class="w-full h-full">
+                    </div>
+                    <h3 class="text-white font-bold text-xl tracking-wider">Akshar Anant</h3>
+                    <div class="mt-2 inline-block bg-gray-400 text-black px-3 py-0.5 text-xs font-mono font-bold uppercase">Secretary</div>
+                </div>
+            </div>
+
+            <!-- Department Heads -->
+            <div class="flex items-center mb-12">
+                <div class="h-px bg-gray-500 w-12 mr-4"></div>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-300 font-sans uppercase tracking-widest">Division Commanders</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Dev Lead -->
+                <div class="col-span-1">
+                    <div class="cyber-card p-5 cursor-pointer hover:bg-gray-800 group" onclick="toggleDept('dev')">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-16 h-16 rounded border border-gray-600 overflow-hidden">
+                                <img src="https://api.dicebear.com/7.x/initials/svg?seed=AS&backgroundColor=0a0a0a" class="w-full h-full">
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-white font-bold text-lg">Aaditya Srinivasan</h3>
+                                <p class="text-cyber-neon text-xs font-mono uppercase">>_ Developer Lead</p>
+                            </div>
+                            <i class="fas fa-chevron-down text-gray-500 group-hover:text-white transition-transform duration-300" id="icon-dev"></i>
+                        </div>
+                    </div>
+                    <!-- Dropdown Squad List -->
+                    <div id="dept-dev" class="dept-section bg-gray-900/50 border-l border-r border-b border-gray-800 mx-2 mb-4">
+                        <div class="p-4 grid grid-cols-2 gap-3">
+                            <!-- Placeholders -->
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 01</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 02</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 03</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 04</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 05</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 06</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 07</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 08</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cybersecurity Lead -->
+                <div class="col-span-1">
+                    <div class="cyber-card p-5 cursor-pointer hover:bg-gray-800 group" onclick="toggleDept('cyber')">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-16 h-16 rounded border border-gray-600 overflow-hidden">
+                                <img src="https://api.dicebear.com/7.x/initials/svg?seed=AS2&backgroundColor=0a0a0a" class="w-full h-full">
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-white font-bold text-lg">Asim</h3>
+                                <p class="text-cyber-neon text-xs font-mono uppercase">>_ Cybersecurity Lead</p>
+                            </div>
+                            <i class="fas fa-chevron-down text-gray-500 group-hover:text-white transition-transform duration-300" id="icon-cyber"></i>
+                        </div>
+                    </div>
+                    <div id="dept-cyber" class="dept-section bg-gray-900/50 border-l border-r border-b border-gray-800 mx-2 mb-4">
+                        <div class="p-4 grid grid-cols-2 gap-3">
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 01</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 02</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 03</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 04</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 05</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 06</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 07</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 08</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Management Lead -->
+                <div class="col-span-1">
+                    <div class="cyber-card p-5 cursor-pointer hover:bg-gray-800 group" onclick="toggleDept('mgmt')">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-16 h-16 rounded border border-gray-600 overflow-hidden">
+                                <img src="https://api.dicebear.com/7.x/initials/svg?seed=SF&backgroundColor=0a0a0a" class="w-full h-full">
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-white font-bold text-lg">Saif</h3>
+                                <p class="text-cyber-neon text-xs font-mono uppercase">>_ Management Lead</p>
+                            </div>
+                            <i class="fas fa-chevron-down text-gray-500 group-hover:text-white transition-transform duration-300" id="icon-mgmt"></i>
+                        </div>
+                    </div>
+                    <div id="dept-mgmt" class="dept-section bg-gray-900/50 border-l border-r border-b border-gray-800 mx-2 mb-4">
+                        <div class="p-4 grid grid-cols-2 gap-3">
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 01</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 02</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 03</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 04</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 05</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 06</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 07</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 08</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Creative Lead -->
+                <div class="col-span-1">
+                    <div class="cyber-card p-5 cursor-pointer hover:bg-gray-800 group" onclick="toggleDept('creative')">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-16 h-16 rounded border border-gray-600 overflow-hidden">
+                                <img src="https://api.dicebear.com/7.x/initials/svg?seed=LN&backgroundColor=0a0a0a" class="w-full h-full">
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-white font-bold text-lg">Laksmi Naidu</h3>
+                                <p class="text-cyber-neon text-xs font-mono uppercase">>_ Creative Lead</p>
+                            </div>
+                            <i class="fas fa-chevron-down text-gray-500 group-hover:text-white transition-transform duration-300" id="icon-creative"></i>
+                        </div>
+                    </div>
+                    <div id="dept-creative" class="dept-section bg-gray-900/50 border-l border-r border-b border-gray-800 mx-2 mb-4">
+                        <div class="p-4 grid grid-cols-2 gap-3">
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 01</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 02</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 03</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 04</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 05</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 06</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 07</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 08</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PR Lead -->
+                <div class="col-span-1">
+                    <div class="cyber-card p-5 cursor-pointer hover:bg-gray-800 group" onclick="toggleDept('pr')">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-16 h-16 rounded border border-gray-600 overflow-hidden">
+                                <img src="https://api.dicebear.com/7.x/initials/svg?seed=AI&backgroundColor=0a0a0a" class="w-full h-full">
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-white font-bold text-lg">Aditya Idnani</h3>
+                                <p class="text-cyber-neon text-xs font-mono uppercase">>_ PR Lead</p>
+                            </div>
+                            <i class="fas fa-chevron-down text-gray-500 group-hover:text-white transition-transform duration-300" id="icon-pr"></i>
+                        </div>
+                    </div>
+                    <div id="dept-pr" class="dept-section bg-gray-900/50 border-l border-r border-b border-gray-800 mx-2 mb-4">
+                        <div class="p-4 grid grid-cols-2 gap-3">
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 01</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 02</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 03</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 04</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 05</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 06</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 07</div>
+                            <div class="text-xs text-gray-400 font-mono p-2 border border-gray-800 bg-black/50">Unit Member 08</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="mt-12 p-8 border border-dashed border-gray-800 rounded text-center">
+                <h3 class="text-xl text-gray-300 mb-2 font-mono">Join the Ranks</h3>
+                <p class="text-gray-500 text-sm mb-6">Recruitment drives open every semester. Stay tuned for announcements.</p>
+                <button onclick="showSection('contact')" class="text-white hover:text-gray-300 underline font-mono text-sm">Initiate Application ></button>
+            </div>
+        </section>
+
+        <!-- SECTION: CONTACT -->
+        <section id="contact" class="page-section hidden container mx-auto px-6 py-12 flex items-center justify-center">
+            <div class="w-full max-w-2xl">
+                <div class="flex items-center mb-8 justify-center">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white font-sans uppercase tracking-widest text-center">Establish Uplink</h2>
+                </div>
+
+                <form class="space-y-6 cyber-card p-8 md:p-12 bg-black/50 backdrop-blur-lg">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-xs text-gray-400 font-mono">USER_ID</label>
+                            <input type="text" class="w-full bg-gray-900 border border-gray-700 text-white p-3 focus:border-white focus:outline-none font-mono" placeholder="Name">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs text-gray-400 font-mono">COMM_CHANNEL</label>
+                            <input type="email" class="w-full bg-gray-900 border border-gray-700 text-white p-3 focus:border-white focus:outline-none font-mono" placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs text-gray-400 font-mono">DATA_PACKET</label>
+                        <textarea class="w-full bg-gray-900 border border-gray-700 text-white p-3 focus:border-white focus:outline-none font-mono h-32" placeholder="Message..."></textarea>
+                    </div>
+                    <button type="button" class="w-full bg-white text-black font-bold font-mono py-3 hover:bg-gray-300 transition-colors uppercase tracking-widest clip-path-polygon">
+                        Transmit Data
+                    </button>
+                </form>
+
+                <div class="mt-12 flex justify-center space-x-8">
+                    <a href="https://linkedin.com/company/aegis-srm" target="_blank" class="text-gray-600 hover:text-white transition-colors text-2xl"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="text-gray-600 hover:text-white transition-colors text-2xl"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-gray-600 hover:text-white transition-colors text-2xl"><i class="fab fa-discord"></i></a>
+                    <a href="#" class="text-gray-600 hover:text-white transition-colors text-2xl"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 bg-black py-8 mt-auto relative z-10">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-gray-600 font-mono text-xs">
+                &copy; 2024 AEGIS SRM. SYSTEM SECURE. <br>
+                DESIGNED BY CYBER SENTINEL UNIT.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Logic & Effects -->
+    <script>
+        // --- Navigation Logic ---
+        function showSection(sectionId) {
+            document.querySelectorAll('.page-section').forEach(sec => {
+                sec.classList.add('hidden');
+            });
+            
+            const target = document.getElementById(sectionId);
+            target.classList.remove('hidden');
+            target.classList.add('animate-fade-in-up');
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            const activeNav = document.getElementById('nav-' + sectionId);
+            if(activeNav) activeNav.classList.add('active');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // --- Department Toggle Logic ---
+        function toggleDept(deptId) {
+            const content = document.getElementById('dept-' + deptId);
+            const icon = document.getElementById('icon-' + deptId);
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('expanded');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // --- Typing Effect ---
+        const textElement = document.getElementById('typing-text');
+        const texts = ["System Status: ONLINE...", "Scanning for threats...", "Aegis Protocol: ACTIVE"];
+        let textIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function type() {
+            const currentText = texts[textIndex];
+            
+            if (isDeleting) {
+                textElement.textContent = currentText.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                textElement.textContent = currentText.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = isDeleting ? 50 : 100;
+
+            if (!isDeleting && charIndex === currentText.length) {
+                typeSpeed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                textIndex = (textIndex + 1) % texts.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(type, typeSpeed);
+        }
+        
+        document.addEventListener('DOMContentLoaded', type);
+
+
+        // --- Matrix Rain Effect (Silver) ---
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*';
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+
+        function drawMatrix() {
+            // Very subtle fade
+            ctx.fillStyle = 'rgba(2, 2, 2, 0.05)'; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                
+                // Silver/White colors
+                if(Math.random() > 0.98) {
+                    ctx.fillStyle = '#ffffff'; // Sparkle white
+                } else {
+                    ctx.fillStyle = '#4b5563'; // Dark gray/silver
+                }
+
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 33);
+
+    </script>
+</body>
+</html>
