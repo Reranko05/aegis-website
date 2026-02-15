@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AEGIS SRM | Cyber Sentinel</title>
+    <title>AEGIS SRM | Intel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,13 +16,13 @@
                 extend: {
                     colors: {
                         cyber: {
-                            black: '#020202',       /* Darker Black */
+                            black: '#020202',
                             dark: '#080808',
                             gray: '#151515',
-                            neon: '#c0c0c0',        /* Silver/Platinum to match Logo */
-                            accent: '#708090',      /* Slate Grey Accent */
-                            green: '#ffffff',       /* White for success */
-                            red: '#8b0000',         /* Dark Red for errors */
+                            neon: '#c0c0c0',
+                            accent: '#708090',
+                            green: '#ffffff',
+                            red: '#8b0000',
                             dim: 'rgba(192, 192, 192, 0.1)'
                         }
                     },
@@ -66,7 +66,6 @@
             overflow-x: hidden;
         }
 
-        /* Custom Scrollbar - Silver Theme */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -78,7 +77,6 @@
             border: 1px solid #c0c0c0;
         }
 
-        /* Glitch Effect Classes - Silver/White */
         .glitch-text {
             position: relative;
         }
@@ -94,13 +92,13 @@
         }
         .glitch-text::before {
             left: 2px;
-            text-shadow: -1px 0 #708090; /* Slate Shadow */
+            text-shadow: -1px 0 #708090;
             clip: rect(24px, 550px, 90px, 0);
             animation: glitch-anim-2 3s infinite linear alternate-reverse;
         }
         .glitch-text::after {
             left: -2px;
-            text-shadow: -1px 0 #ffffff; /* White Shadow */
+            text-shadow: -1px 0 #ffffff;
             clip: rect(85px, 550px, 140px, 0);
             animation: glitch-anim 2.5s infinite linear alternate-reverse;
         }
@@ -122,7 +120,6 @@
             100% { clip: rect(79px, 9999px, 60px, 0); }
         }
 
-        /* CRT Scanline Overlay */
         .scanline-overlay {
             position: fixed;
             top: 0;
@@ -150,7 +147,6 @@
             transition: all 0.3s ease;
         }
         
-        /* Metallic sheen on hover */
         .cyber-card::before {
             content: '';
             position: absolute;
@@ -182,13 +178,12 @@
             box-shadow: 0 0 15px rgba(192, 192, 192, 0.3) inset;
         }
 
-        /* Matrix Canvas */
         #matrix-canvas {
             position: fixed;
             top: 0;
             left: 0;
             z-index: -1;
-            opacity: 0.1; /* Reduced opacity for cleaner look */
+            opacity: 0.1;
         }
         
         .nav-link.active {
@@ -197,7 +192,6 @@
             border-bottom: 2px solid #c0c0c0;
         }
 
-        /* Department Expansion Animation */
         .dept-section {
             transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
             max-height: 0;
@@ -206,24 +200,19 @@
         }
         
         .dept-section.expanded {
-            max-height: 2000px; /* Arbitrary large height */
+            max-height: 2000px;
             opacity: 1;
         }
     </style>
 </head>
-<body class="font-sans" data-page="home">
+<body class="font-sans" data-page="intel">
 
-    <!-- CRT Overlay -->
     <div class="scanline-overlay"></div>
-
-    <!-- Matrix Background -->
     <canvas id="matrix-canvas"></canvas>
 
-    <!-- Navigation -->
     <nav class="fixed top-0 w-full z-40 bg-cyber-black/95 backdrop-blur-md border-b border-gray-800">
         <div class="container mx-auto px-6 py-4">
             <div class="flex justify-between items-center">
-                <!-- Logo Area -->
                 <div class="flex items-center space-x-3 group cursor-pointer" data-link="index.html" role="button">
                     <div class="relative w-10 h-10 overflow-hidden border border-gray-500 rounded-sm p-0.5">
                         <img src="image_215445.jpg" alt="Aegis Logo" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" onerror="this.src='https://placehold.co/100x100/1a1a1a/c0c0c0?text=AEGIS'">
@@ -235,7 +224,6 @@
                     </div>
                 </div>
 
-                <!-- Desktop Menu -->
                 <div class="hidden md:flex space-x-8 font-mono text-sm">
                     <button type="button" data-link="index.html" data-nav="home" class="nav-link text-gray-500 hover:text-white transition-colors tracking-widest uppercase py-1" id="nav-home">
                         <span class="text-cyber-neon mr-1">></span>Main
@@ -254,14 +242,12 @@
                     </button>
                 </div>
 
-                <!-- Mobile Menu Button -->
                 <button class="md:hidden text-cyber-neon hover:text-white" onclick="toggleMobileMenu()">
                     <i class="fas fa-bars text-2xl"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Mobile Menu Overlay -->
         <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-cyber-black border-b border-gray-700 p-4">
             <div class="flex flex-col space-y-4 font-mono">
                 <button type="button" data-link="index.html" class="text-left text-gray-400 hover:text-white">_HOME</button>
@@ -273,65 +259,60 @@
         </div>
     </nav>
 
-    <!-- Main Content Area -->
     <main class="pt-24 min-h-screen relative z-10">
-        
-        <!-- SECTION: HOME -->
-        <section id="home" class="page-section container mx-auto px-6 flex flex-col items-center justify-center min-h-[80vh] text-center">
-            
-            <div class="mb-8 relative group">
-                <!-- Silver Glow -->
-                <div class="absolute -inset-1 bg-gradient-to-r from-gray-500 to-white rounded-full blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-                <div class="relative w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-gray-800 bg-black p-1">
-                    <img src="image_215445.jpg" alt="Aegis Logo" class="w-full h-full object-cover rounded-full opacity-90 hover:opacity-100 transition-opacity hover:scale-105 duration-500" onerror="this.src='https://placehold.co/300x300/1a1a1a/c0c0c0?text=AEGIS'">
-                </div>
+        <section id="about" class="page-section container mx-auto px-6 py-12">
+            <div class="flex items-center mb-12">
+                <div class="h-px bg-white w-12 mr-4"></div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white font-sans uppercase tracking-widest">About The Division</h2>
             </div>
 
-            <h1 class="text-5xl md:text-8xl font-bold mb-4 glitch-text font-sans tracking-tighter text-white" data-text="AEGIS SRM">
-                AEGIS SRM
-            </h1>
-            
-            <div class="flex items-center space-x-2 text-gray-400 font-mono text-sm md:text-lg mb-8 bg-gray-900 px-4 py-2 border border-gray-700 rounded">
-                <span class="animate-pulse text-white">●</span>
-                <span id="typing-text">System Status: ONLINE...</span>
-            </div>
-
-            <p class="text-gray-500 max-w-2xl text-lg md:text-xl mb-10 leading-relaxed">
-                The Student Run Organization dedicated to <span class="text-gray-200 font-bold">Cybersecurity</span>, <span class="text-gray-200 font-bold">Ethical Hacking</span>, and <span class="text-gray-200 font-bold">Technical Intelligence</span> at SRMIST.
-            </p>
-
-            <div class="flex flex-col md:flex-row gap-4">
-                <button type="button" data-link="ops.html" class="cyber-btn bg-white text-black font-bold px-8 py-3 text-lg hover:bg-gray-200 transition-colors">
-                    EXPLORE OPERATIONS
-                </button>
-                <button type="button" data-link="intel.html" class="cyber-btn border border-gray-600 text-gray-400 px-8 py-3 text-lg hover:border-white hover:text-white transition-colors">
-                    DECRYPT INFO
-                </button>
-            </div>
-            
-            <!-- Quick Stats -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 border-t border-gray-800 pt-10 w-full max-w-4xl">
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-white font-mono">50+</div>
-                    <div class="text-xs text-gray-500 uppercase tracking-widest mt-1">Events Hosted</div>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6 text-gray-400 font-mono leading-relaxed">
+                    <p>
+                        <span class="text-cyber-neon font-bold">>_ WHO WE ARE:</span><br>
+                        Aegis SRM is a premier student-run organization at SRM Institute of Science and Technology. Like the mythological shield it is named after, we aim to be the guardians of digital literacy and cybersecurity awareness on campus.
+                    </p>
+                    <p>
+                        <span class="text-cyber-neon font-bold">>_ MISSION DIRECTIVE:</span><br>
+                        We bridge the gap between academic theory and real-world application. Through hands-on workshops, competitive CTFs, and expert seminars, we empower students to navigate and secure the digital frontier.
+                    </p>
+                    <p>
+                        <span class="text-cyber-neon font-bold">>_ DOMAINS:</span>
+                    </p>
+                    <ul class="list-none space-y-2 ml-4">
+                        <li class="flex items-center"><i class="fas fa-shield-alt text-cyber-neon w-6"></i> Cybersecurity & Forensics</li>
+                        <li class="flex items-center"><i class="fas fa-terminal text-cyber-neon w-6"></i> Ethical Hacking</li>
+                        <li class="flex items-center"><i class="fas fa-code text-cyber-neon w-6"></i> Secure Development</li>
+                        <li class="flex items-center"><i class="fas fa-network-wired text-cyber-neon w-6"></i> Networking & IoT</li>
+                    </ul>
                 </div>
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-white font-mono">2k+</div>
-                    <div class="text-xs text-gray-500 uppercase tracking-widest mt-1">Community</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-white font-mono">100%</div>
-                    <div class="text-xs text-gray-500 uppercase tracking-widest mt-1">Student Run</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-white font-mono">24/7</div>
-                    <div class="text-xs text-gray-500 uppercase tracking-widest mt-1">Active</div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="cyber-card p-6 rounded">
+                        <i class="fas fa-chess-knight text-4xl text-gray-300 mb-4"></i>
+                        <h3 class="text-xl font-bold text-white mb-2">Strategy</h3>
+                        <p class="text-sm text-gray-500">Planning and executing complex technical events.</p>
+                    </div>
+                    <div class="cyber-card p-6 rounded">
+                        <i class="fas fa-user-secret text-4xl text-gray-300 mb-4"></i>
+                        <h3 class="text-xl font-bold text-white mb-2">Privacy</h3>
+                        <p class="text-sm text-gray-500">Advocating for data rights and digital anonymity.</p>
+                    </div>
+                    <div class="cyber-card p-6 rounded">
+                        <i class="fas fa-bug text-4xl text-gray-300 mb-4"></i>
+                        <h3 class="text-xl font-bold text-white mb-2">Defense</h3>
+                        <p class="text-sm text-gray-500">Identifying vulnerabilities before they are exploited.</p>
+                    </div>
+                    <div class="cyber-card p-6 rounded">
+                        <i class="fas fa-users text-4xl text-gray-300 mb-4"></i>
+                        <h3 class="text-xl font-bold text-white mb-2">Community</h3>
+                        <p class="text-sm text-gray-500">Building a network of skilled ethical hackers.</p>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="border-t border-gray-800 bg-black py-8 mt-auto relative z-10">
         <div class="container mx-auto px-6 text-center">
             <p class="text-gray-600 font-mono text-xs">
@@ -341,9 +322,7 @@
         </div>
     </footer>
 
-    <!-- JavaScript for Logic & Effects -->
     <script>
-        // --- Navigation Logic (Multi-Page) ---
         const pageKey = document.body.dataset.page;
         if (pageKey) {
             const activeNav = document.querySelector(`[data-nav="${pageKey}"]`);
@@ -368,7 +347,6 @@
             menu.classList.toggle('hidden');
         }
 
-        // --- Department Toggle Logic ---
         function toggleDept(deptId) {
             const content = document.getElementById('dept-' + deptId);
             const icon = document.getElementById('icon-' + deptId);
@@ -382,43 +360,6 @@
             }
         }
 
-        // --- Typing Effect ---
-        const textElement = document.getElementById('typing-text');
-        if (textElement) {
-            const texts = ["System Status: ONLINE...", "Scanning for threats...", "Aegis Protocol: ACTIVE"];
-            let textIndex = 0;
-            let charIndex = 0;
-            let isDeleting = false;
-
-            function type() {
-                const currentText = texts[textIndex];
-                
-                if (isDeleting) {
-                    textElement.textContent = currentText.substring(0, charIndex - 1);
-                    charIndex--;
-                } else {
-                    textElement.textContent = currentText.substring(0, charIndex + 1);
-                    charIndex++;
-                }
-
-                let typeSpeed = isDeleting ? 50 : 100;
-
-                if (!isDeleting && charIndex === currentText.length) {
-                    typeSpeed = 2000;
-                    isDeleting = true;
-                } else if (isDeleting && charIndex === 0) {
-                    isDeleting = false;
-                    textIndex = (textIndex + 1) % texts.length;
-                    typeSpeed = 500;
-                }
-
-                setTimeout(type, typeSpeed);
-            }
-
-            document.addEventListener('DOMContentLoaded', type);
-        }
-
-        // --- Matrix Rain Effect (Silver) ---
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
 
@@ -440,7 +381,6 @@
         }
 
         function drawMatrix() {
-            // Very subtle fade
             ctx.fillStyle = 'rgba(2, 2, 2, 0.05)'; 
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -449,11 +389,10 @@
             for (let i = 0; i < drops.length; i++) {
                 const text = letters.charAt(Math.floor(Math.random() * letters.length));
                 
-                // Silver/White colors
                 if(Math.random() > 0.98) {
-                    ctx.fillStyle = '#ffffff'; // Sparkle white
+                    ctx.fillStyle = '#ffffff';
                 } else {
-                    ctx.fillStyle = '#4b5563'; // Dark gray/silver
+                    ctx.fillStyle = '#4b5563';
                 }
 
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
@@ -466,7 +405,6 @@
         }
 
         setInterval(drawMatrix, 33);
-
     </script>
 </body>
 </html>
