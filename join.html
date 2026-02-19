@@ -443,7 +443,7 @@
         }
 
         const joinButton = document.getElementById('join-submit');
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbx4GlxIUgFabGZyNr1WTfegyTv0YJvlZdVyn2HR1QFcR0Sarx_VOgCYb9dc8fIW6vYA/exec';
+        const API_URL = '/api/submit-form';
         if (joinButton) {
             joinButton.addEventListener('click', async () => {
                 const nameInput = document.getElementById('join-name');
@@ -463,11 +463,6 @@
 
                 if (!name || !email || !reg || !year || !courseValue || !sectionValue || selectedTeams.length === 0) {
                     alert('Complete all fields and select at least one team.');
-                    return;
-                }
-
-                if (!GAS_URL) {
-                    alert('Submission endpoint not configured.');
                     return;
                 }
 
@@ -494,20 +489,25 @@
                 };
 
                 try {
-                    await fetch(GAS_URL, {
+                    const response = await fetch(API_URL, {
                         method: 'POST',
-                        mode: 'no-cors',
                         headers: {
-                            'Content-Type': 'text/plain;charset=utf-8'
+                            'Content-Type': 'application/json'
                         },
                         body: JSON.stringify(payload)
                     });
 
-                    if (statusEl) {
-                        statusEl.textContent = 'Transmission received. Stand by for response.';
-                        statusEl.className = 'text-center text-sm font-mono text-green-400';
+                    const result = await response.json();
+
+                    if (response.ok && result.success) {
+                        if (statusEl) {
+                            statusEl.textContent = result.message;
+                            statusEl.className = 'text-center text-sm font-mono text-green-400';
+                        } else {
+                            alert(result.message);
+                        }
                     } else {
-                        alert('Transmission received. Stand by for response.');
+                        throw new Error(result.error || 'Unknown error');
                     }
                 } catch (error) {
                     if (statusEl) {
