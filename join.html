@@ -696,6 +696,7 @@
             const randomDuration = 8 + Math.random() * 6; // 8-14 seconds
             
             line.style.left = randomLeft + 'px';
+            line.style.transform = 'translateX(-50%)';
             line.style.top = (Math.random() * -100) + 'vh';
             line.style.animationDuration = randomDuration + 's';
             line.style.animationDelay = Math.random() * 2 + 's';
