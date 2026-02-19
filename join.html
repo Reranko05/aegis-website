@@ -206,6 +206,9 @@
             white-space: nowrap;
             opacity: 0.8;
             animation: float-up linear infinite;
+            max-width: 500px;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .code-line.red {
@@ -692,8 +695,11 @@
             const snippet = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
             line.textContent = snippet;
             
-            const randomLeft = Math.random() * window.innerWidth;
-            const randomDuration = 8 + Math.random() * 6; // 8-14 seconds
+            // Position lines with right margin only - no left margin constraint
+            const minLeft = 0;
+            const maxLeft = window.innerWidth - 250;
+            const randomLeft = minLeft + Math.random() * (maxLeft - minLeft);
+            const randomDuration = 8 + Math.random() * 6;
             
             line.style.left = randomLeft + 'px';
             line.style.transform = 'translateX(-50%)';
