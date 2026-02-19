@@ -190,6 +190,45 @@
             z-index: -1;
             opacity: 0.1; /* Reduced opacity for cleaner look */
         }
+
+        .code-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .code-line {
+            position: absolute;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00, 0 0 20px #00aa00;
+            white-space: nowrap;
+            opacity: 0.8;
+            animation: float-up linear infinite;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100vh);
+                opacity: 0;
+            }
+        }
         
         .nav-link.active {
             color: #ffffff;
@@ -218,6 +257,7 @@
 
     <!-- Matrix Background -->
     <canvas id="matrix-canvas"></canvas>
+    <div class="code-lines" id="code-lines-container"></div>
 
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-40 bg-cyber-black/95 backdrop-blur-md border-b border-gray-800">
@@ -470,6 +510,139 @@
         }
 
         setInterval(drawMatrix, 33);
+
+        // Generate green coding lines effect
+        const codeSnippets = [
+            'const aegis = new SecurityProtocol();',
+            'function initiateScan() { return threat_level; }',
+            'if (access_granted) { load_modules(); }',
+            'for (let i = 0; i < firewalls.length; i++) {',
+            'while (scanning && !detected) { continue; }',
+            'class CyberDefense { constructor() {} }',
+            'try { authenticate(); } catch(e) { block(); }',
+            'enum SecurityLevel { LOW, MEDIUM, HIGH, CRITICAL }',
+            'let status = "AEGIS_ONLINE";',
+            'function encryptData(data) { return hash(data); }',
+            'if (threat_detected) { activateDefense(); }',
+            'var protocols = ["TCP/IP", "TLS", "SSH"];',
+            'socket.emit("connect", { team: "defense" });',
+            'database.query("SELECT * FROM threats");',
+            'async function validateAccess() { return true; }',
+            'class Vulnerability extends Error { }',
+            'let cipher = algo.AES_256_CBC();',
+            'firewall.block(malicious_traffic);',
+            'root@aegis:~# systemctl start defense',
+            'const secured = encrypt(confidential_data);',
+            'import { SecurityModule } from "./defense";',
+            'export class ThreatDetection { run() {} }',
+            'const payload = Buffer.from(data).toString("base64");',
+            'admin@server:~$ sudo systemctl restart aegis',
+            'const token = jwt.sign(user, SECRET_KEY);',
+            'if (vulnerability.severity > 8) { alert(); }',
+            'let packets = network.capture({ filter: "tcp" });',
+            'function verifySignature(msg, sig) { return valid; }',
+            'const malware = sandbox.execute(suspicious_code);',
+            'switch(incident.type) { case BREACH: respond(); }',
+            'Object.freeze(sensitiveData);',
+            'const hash = crypto.createHash("sha256");',
+            '[ SCANNING ] Intrusion detected at 192.168.1.100',
+            'Permission denied. Access level insufficient.',
+            'Initializing defensive countermeasures...',
+            'const virus = antivirus.scan(system_memory);',
+            'if (entropy > threshold) { quarantine(); }',
+            'function hexdump(buffer) { return formatted; }',
+            'const timestamp = Date.now();',
+            'logger.info("Security audit completed");',
+            'Array.from(infected_files).forEach(f => clean(f));',
+            'const regions = ["NORTH", "SOUTH", "EAST", "WEST"];',
+            'path /dev/zero; dd if=/dev/zero of=secure_wipe',
+            'nmap -sV -sC -O 10.0.0.0/8',
+            'ping -c 4 target.defense.local',
+            'const blacklist = ["*.malicious.com", "badhost"];',
+            'require("fs").readFileSync("/etc/passwd");',
+            'DELETE FROM threats WHERE status = "inactive";',
+            'INSERT INTO logs VALUES (timestamp, event);',
+            'UPDATE users SET role = "admin" WHERE id = ?;',
+            'SELECT * FROM incidents WHERE severity LIKE "critical"',
+            'PRAGMA foreign_keys = ON;',
+            'CREATE TABLE IF NOT EXISTS defense_log {};',
+            'ALTER TABLE users ADD COLUMN security_level INT;',
+            'DROP TABLE old_vulnerabilities;',
+            'GRANT ALL PRIVILEGES ON *.* TO admin@localhost;',
+            'const encrypted = aes.encrypt(password, key);',
+            'response.setHeader("X-Frame-Options", "DENY");',
+            'const middleware = (req, res, next) => { };',
+            'app.use(express.json({ limit: "10mb" }));',
+            'if (req.user.role !== "admin") { return 403; }',
+            'const rate_limit = new Map();',
+            'setInterval(() => purgeOldLogs(), 86400000);',
+            'const redis = new Redis({ password: SECRET });',
+            'worker.postMessage({ cmd: "scan_system" });',
+            'Promise.all([task1, task2, task3]).catch(handle);',
+            'const config = JSON.parse(fs.readFileSync("cfg.json"));',
+            'process.env.NODE_ENV === "production" ? secure() : debug();',
+            '#!/bin/bash\necho "AEGIS Defense System Active"',
+            'sudo iptables -A INPUT -s 192.168.1.0/24 -j ACCEPT',
+            'openssl req -new -x509 -keyout key.pem -out cert.pem',
+            'ssh -p 2222 admin@secure.defense.com',
+            'git clone https://github.com/aegis/security-core.git',
+            'docker run -d --name aegis-api aegis:latest',
+            'kubectl apply -f security-deployment.yaml',
+            'terraform apply -var="env=production"',
+            'ansible-playbook security-hardening.yml',
+            'python3 threat_detector.py --mode deep_scan',
+            'java -jar security-framework.jar --start',
+            'gcc -O3 -Wall exploit_detector.c -o detector',
+            'go run main.go --config config.toml',
+            'cargo build --release --features security',
+            'ruby track_vulnerabilities.rb --daemon',
+            'php artisan security:audit --verbose',
+            'npm install --save cryptography-suite',
+            'pip install threat-intelligence-api',
+            'apt-get update && apt-get install security-tools',
+            'brew install network-forensics-suite',
+            'choco install DefenseTools -y',
+            'Respuesta: Servidor seguro en línea',
+            '응답: 시스템 방어 활성화됨',
+            'Ответ: Все системы защиты включены'
+        ];
+
+        function generateCodeLine() {
+            const container = document.getElementById('code-lines-container');
+            if (!container) return;
+
+            const line = document.createElement('div');
+            line.className = 'code-line';
+            
+            const snippet = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
+            line.textContent = snippet;
+            
+            const randomLeft = Math.random() * window.innerWidth;
+            const randomDuration = 8 + Math.random() * 6;
+            
+            line.style.left = randomLeft + 'px';
+            line.style.top = (Math.random() * -100) + 'vh';
+            line.style.animationDuration = randomDuration + 's';
+            line.style.animationDelay = Math.random() * 2 + 's';
+            
+            container.appendChild(line);
+            
+            setTimeout(() => {
+                line.remove();
+            }, (randomDuration + 2) * 1000);
+        }
+
+        // Generate new code lines periodically - 3 lines every 600ms
+        setInterval(() => {
+            generateCodeLine();
+            generateCodeLine();
+            generateCodeLine();
+        }, 600);
+        
+        // Generate initial batch - more lines at start
+        for (let i = 0; i < 20; i++) {
+            setTimeout(() => generateCodeLine(), i * 150);
+        }
 
     </script>
 </body>
