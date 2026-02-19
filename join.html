@@ -208,6 +208,11 @@
             animation: float-up linear infinite;
         }
 
+        .code-line.red {
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #cc0000;
+        }
+
         @keyframes float-up {
             0% {
                 transform: translateY(100vh);
@@ -678,6 +683,11 @@
 
             const line = document.createElement('div');
             line.className = 'code-line';
+            
+            // 2:5 ratio - 2 red for every 5 green
+            if (Math.random() < 2/7) {
+                line.classList.add('red');
+            }
             
             const snippet = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
             line.textContent = snippet;
