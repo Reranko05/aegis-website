@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AEGIS SRM | Intel</title>
+    <title>AEGIS SRM | Gallery</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <script>
         tailwind.config = {
             theme: {
@@ -138,7 +138,7 @@
             pointer-events: none;
             opacity: 0.2;
         }
-        
+
         .cyber-card {
             background: rgba(15, 15, 15, 0.9);
             border: 1px solid #333;
@@ -146,7 +146,7 @@
             overflow: hidden;
             transition: all 0.3s ease;
         }
-        
+
         .cyber-card::before {
             content: '';
             position: absolute;
@@ -172,7 +172,7 @@
             clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
             transition: all 0.3s ease;
         }
-        
+
         .cyber-btn:hover {
             text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
             box-shadow: 0 0 15px rgba(192, 192, 192, 0.3) inset;
@@ -185,27 +185,15 @@
             z-index: -1;
             opacity: 0.1;
         }
-        
+
         .nav-link.active {
             color: #ffffff;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
             border-bottom: 2px solid #c0c0c0;
         }
-
-        .dept-section {
-            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-        }
-        
-        .dept-section.expanded {
-            max-height: 2000px;
-            opacity: 1;
-        }
     </style>
 </head>
-<body class="font-sans" data-page="intel">
+<body class="font-sans" data-page="gallery">
 
     <div class="scanline-overlay"></div>
     <canvas id="matrix-canvas"></canvas>
@@ -264,56 +252,16 @@
     </nav>
 
     <main class="pt-24 min-h-screen relative z-10">
-        <section id="about" class="page-section container mx-auto px-6 py-12">
-            <div class="flex items-center mb-12">
+        <section class="page-section container mx-auto px-6 py-12">
+            <div class="flex items-center mb-6">
                 <div class="h-px bg-white w-12 mr-4"></div>
-                <h2 class="text-3xl md:text-4xl font-bold text-white font-sans uppercase tracking-widest">About The Division</h2>
+                <h1 class="text-3xl md:text-4xl font-bold text-white font-sans uppercase tracking-widest">Gallery Archive</h1>
             </div>
+            <p class="text-gray-500 max-w-3xl mb-10">
+                Curated field captures from AEGIS SRM operations, trainings, and unit deployments.
+            </p>
 
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div class="space-y-6 text-gray-400 font-mono leading-relaxed">
-                    <p>
-                        <span class="text-cyber-neon font-bold">>_ WHO WE ARE:</span><br>
-                        Aegis SRM is a premier student-run organization at SRM Institute of Science and Technology. Like the mythological shield it is named after, we aim to be the guardians of digital literacy and cybersecurity awareness on campus.
-                    </p>
-                    <p>
-                        <span class="text-cyber-neon font-bold">>_ MISSION DIRECTIVE:</span><br>
-                        We bridge the gap between academic theory and real-world application. Through hands-on workshops, competitive CTFs, and expert seminars, we empower students to navigate and secure the digital frontier.
-                    </p>
-                    <p>
-                        <span class="text-cyber-neon font-bold">>_ DOMAINS:</span>
-                    </p>
-                    <ul class="list-none space-y-2 ml-4">
-                        <li class="flex items-center"><i class="fas fa-shield-alt text-cyber-neon w-6"></i> Cybersecurity & Forensics</li>
-                        <li class="flex items-center"><i class="fas fa-terminal text-cyber-neon w-6"></i> Ethical Hacking</li>
-                        <li class="flex items-center"><i class="fas fa-code text-cyber-neon w-6"></i> Secure Development</li>
-                        <li class="flex items-center"><i class="fas fa-network-wired text-cyber-neon w-6"></i> Networking & IoT</li>
-                    </ul>
-                </div>
-                
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="cyber-card p-6 rounded">
-                        <i class="fas fa-chess-knight text-4xl text-gray-300 mb-4"></i>
-                        <h3 class="text-xl font-bold text-white mb-2">Strategy</h3>
-                        <p class="text-sm text-gray-500">Planning and executing complex technical events.</p>
-                    </div>
-                    <div class="cyber-card p-6 rounded">
-                        <i class="fas fa-user-secret text-4xl text-gray-300 mb-4"></i>
-                        <h3 class="text-xl font-bold text-white mb-2">Privacy</h3>
-                        <p class="text-sm text-gray-500">Advocating for data rights and digital anonymity.</p>
-                    </div>
-                    <div class="cyber-card p-6 rounded">
-                        <i class="fas fa-bug text-4xl text-gray-300 mb-4"></i>
-                        <h3 class="text-xl font-bold text-white mb-2">Defense</h3>
-                        <p class="text-sm text-gray-500">Identifying vulnerabilities before they are exploited.</p>
-                    </div>
-                    <div class="cyber-card p-6 rounded">
-                        <i class="fas fa-users text-4xl text-gray-300 mb-4"></i>
-                        <h3 class="text-xl font-bold text-white mb-2">Community</h3>
-                        <p class="text-sm text-gray-500">Building a network of skilled ethical hackers.</p>
-                    </div>
-                </div>
-            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6" id="gallery-grid"></div>
         </section>
     </main>
 
@@ -351,17 +299,25 @@
             menu.classList.toggle('hidden');
         }
 
-        function toggleDept(deptId) {
-            const content = document.getElementById('dept-' + deptId);
-            const icon = document.getElementById('icon-' + deptId);
-            
-            if (content.classList.contains('expanded')) {
-                content.classList.remove('expanded');
-                icon.style.transform = 'rotate(0deg)';
-            } else {
-                content.classList.add('expanded');
-                icon.style.transform = 'rotate(180deg)';
+        const galleryGrid = document.getElementById('gallery-grid');
+        if (galleryGrid) {
+            const totalImages = 45;
+            const tiles = [];
+
+            for (let i = 0; i < totalImages; i++) {
+                const label = String(i).padStart(3, '0');
+                tiles.push(
+                    `<div class="cyber-card group">
+                        <div class="relative h-40 sm:h-48 md:h-52 lg:h-56 bg-black overflow-hidden">
+                            <img src="gallery/${label}.jpeg" alt="Gallery image ${label}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+                            <div class="absolute bottom-3 left-3 text-xs font-mono text-gray-300 tracking-widest">FILE ${label}</div>
+                        </div>
+                    </div>`
+                );
             }
+
+            galleryGrid.innerHTML = tiles.join('');
         }
 
         const canvas = document.getElementById('matrix-canvas');
@@ -371,7 +327,7 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
-        
+
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
@@ -385,15 +341,15 @@
         }
 
         function drawMatrix() {
-            ctx.fillStyle = 'rgba(2, 2, 2, 0.05)'; 
+            ctx.fillStyle = 'rgba(2, 2, 2, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             ctx.font = fontSize + 'px monospace';
 
             for (let i = 0; i < drops.length; i++) {
                 const text = letters.charAt(Math.floor(Math.random() * letters.length));
-                
-                if(Math.random() > 0.98) {
+
+                if (Math.random() > 0.98) {
                     ctx.fillStyle = '#ffffff';
                 } else {
                     ctx.fillStyle = '#4b5563';
@@ -404,11 +360,12 @@
                 if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
                     drops[i] = 0;
                 }
+
                 drops[i]++;
             }
         }
 
-        setInterval(drawMatrix, 33);
+        setInterval(drawMatrix, 50);
     </script>
 </body>
 </html>
