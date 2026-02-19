@@ -192,6 +192,16 @@
             border-bottom: 2px solid #c0c0c0;
         }
 
+        .lightbox-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .lightbox-visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
         .dept-section {
             transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
             max-height: 0;
@@ -267,55 +277,66 @@
         <section id="events" class="page-section container mx-auto px-6 py-12">
             <div class="flex items-center mb-12">
                 <div class="h-px bg-white w-12 mr-4"></div>
-                <h2 class="text-3xl md:text-4xl font-bold text-white font-sans uppercase tracking-widest">Operations Log</h2>
+                <h2 class="text-3xl md:text-4xl font-bold text-white font-sans uppercase tracking-widest">Upcoming Events</h2>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div class="cyber-card group">
-                    <div class="h-48 bg-gray-900 overflow-hidden relative">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent z-10"></div>
-                        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="CTF" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-60 grayscale hover:grayscale-0">
-                        <div class="absolute top-4 right-4 bg-gray-200 text-black text-xs font-bold px-2 py-1 z-20 font-mono">COMPLETED</div>
+                    <div class="h-52 bg-gray-900 overflow-hidden relative">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent z-10 pointer-events-none"></div>
+                        <img src="event_temps/Tech_Varta.jpeg" alt="Tech Varta" class="event-photo w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 cursor-zoom-in" data-full="event_temps/Tech_Varta.jpeg">
                     </div>
                     <div class="p-6">
-                        <div class="text-cyber-neon font-mono text-sm mb-2">>Event Loren Ipsum</div>
-                        <h3 class="text-2xl font-bold text-white mb-3">Loren Ipsum</h3>
-                        <p class="text-gray-400 text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-                        <a href="#" class="text-white text-sm hover:text-cyber-neon transition-colors flex items-center">
-                            View Report <i class="fas fa-arrow-right ml-2 text-xs"></i>
-                        </a>
+                        <h3 class="text-2xl font-bold text-white mb-3">Tech Varta</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="past-events" class="page-section container mx-auto px-6 py-12">
+            <div class="flex items-center mb-12">
+                <div class="h-px bg-gray-500 w-12 mr-4"></div>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-300 font-sans uppercase tracking-widest">Past Events</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="cyber-card group">
+                    <div class="h-52 bg-gray-900 overflow-hidden relative">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent z-10 pointer-events-none"></div>
+                        <img src="event_temps/club_launch.jpeg" alt="Club Launch" class="event-photo w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 cursor-zoom-in" data-full="event_temps/club_launch.jpeg">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-xl font-bold text-white">AEGIS SRM Launch</h3>
                     </div>
                 </div>
 
                 <div class="cyber-card group">
-                    <div class="h-48 bg-gray-900 overflow-hidden relative">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent z-10"></div>
-                        <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Workshop" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-60 grayscale hover:grayscale-0">
-                        <div class="absolute top-4 right-4 bg-white text-black text-xs font-bold px-2 py-1 z-20 font-mono">ACTIVE</div>
+                    <div class="h-52 bg-gray-900 overflow-hidden relative">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent z-10 pointer-events-none"></div>
+                        <img src="event_temps/ai_webinar.jpeg" alt="AI Webinar" class="event-photo w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 cursor-zoom-in" data-full="event_temps/ai_webinar.jpeg">
                     </div>
-                    <div class="p-6">
-                        <div class="text-cyber-neon font-mono text-sm mb-2">>Workshop Loren Ipsum</div>
-                        <h3 class="text-2xl font-bold text-white mb-3">Ethical Hacking 101</h3>
-                        <p class="text-gray-400 text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-                        <a href="#" class="text-white text-sm hover:text-cyber-neon transition-colors flex items-center">
-                            Register Now <i class="fas fa-arrow-right ml-2 text-xs"></i>
-                        </a>
+                    <div class="p-5">
+                        <h3 class="text-xl font-bold text-white">AI in Cyber Defense</h3>
                     </div>
                 </div>
 
                 <div class="cyber-card group">
-                    <div class="h-48 bg-gray-900 overflow-hidden relative">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent z-10"></div>
-                        <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Seminar" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-60 grayscale hover:grayscale-0">
-                        <div class="absolute top-4 right-4 bg-gray-600 text-white text-xs font-bold px-2 py-1 z-20 font-mono">UPCOMING</div>
+                    <div class="h-52 bg-gray-900 overflow-hidden relative">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent z-10 pointer-events-none"></div>
+                        <img src="event_temps/flag_frenzy.jpeg" alt="Flag Frenzy" class="event-photo w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 cursor-zoom-in" data-full="event_temps/flag_frenzy.jpeg">
                     </div>
-                    <div class="p-6">
-                        <div class="text-cyber-neon font-mono text-sm mb-2">SEMINAR Loren Ipsum</div>
-                        <h3 class="text-2xl font-bold text-white mb-3">Loren Ipsum</h3>
-                        <p class="text-gray-400 text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-                        <a href="#" class="text-white text-sm hover:text-cyber-neon transition-colors flex items-center">
-                            Learn More <i class="fas fa-arrow-right ml-2 text-xs"></i>
-                        </a>
+                    <div class="p-5">
+                        <h3 class="text-xl font-bold text-white">CTF Night</h3>
+                    </div>
+                </div>
+
+                <div class="cyber-card group">
+                    <div class="h-52 bg-gray-900 overflow-hidden relative">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent z-10 pointer-events-none"></div>
+                        <img src="event_temps/hyperthon.jpeg" alt="Hyperthon" class="event-photo w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 cursor-zoom-in" data-full="event_temps/hyperthon.jpeg">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-xl font-bold text-white">Security Hackathon</h3>
                     </div>
                 </div>
             </div>
@@ -330,6 +351,13 @@
             </p>
         </div>
     </footer>
+
+    <div id="lightbox" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center transition-opacity duration-300 lightbox-hidden">
+        <button id="lightbox-close" class="absolute top-6 right-6 text-white text-2xl" aria-label="Close full image">
+            <i class="fas fa-times"></i>
+        </button>
+        <img id="lightbox-image" src="" alt="" class="max-h-[90vh] max-w-[92vw] object-contain border border-gray-700 shadow-2xl">
+    </div>
 
     <script>
         const pageKey = document.body.dataset.page;
@@ -368,6 +396,43 @@
                 icon.style.transform = 'rotate(180deg)';
             }
         }
+
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImage = document.getElementById('lightbox-image');
+        const lightboxClose = document.getElementById('lightbox-close');
+
+        function openLightbox(src, alt) {
+            lightboxImage.src = src;
+            lightboxImage.alt = alt || 'Event image';
+            lightbox.classList.remove('lightbox-hidden');
+            lightbox.classList.add('lightbox-visible');
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('lightbox-visible');
+            lightbox.classList.add('lightbox-hidden');
+            lightboxImage.src = '';
+        }
+
+        document.querySelectorAll('.event-photo').forEach(photo => {
+            photo.addEventListener('click', () => {
+                const fullSrc = photo.getAttribute('data-full') || photo.src;
+                openLightbox(fullSrc, photo.alt);
+            });
+        });
+
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightbox.addEventListener('click', event => {
+            if (event.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape') {
+                closeLightbox();
+            }
+        });
 
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');

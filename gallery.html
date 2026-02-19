@@ -304,14 +304,13 @@
             const totalImages = 45;
             const tiles = [];
 
-            for (let i = 0; i < totalImages; i++) {
+            for (let i = 1; i < totalImages; i++) {
                 const label = String(i).padStart(3, '0');
                 tiles.push(
                     `<div class="cyber-card group">
                         <div class="relative h-40 sm:h-48 md:h-52 lg:h-56 bg-black overflow-hidden">
                             <img src="gallery/${label}.jpeg" alt="Gallery image ${label}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-transform duration-500" loading="lazy">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
-                            <div class="absolute bottom-3 left-3 text-xs font-mono text-gray-300 tracking-widest">FILE ${label}</div>
                         </div>
                     </div>`
                 );
