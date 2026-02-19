@@ -273,17 +273,66 @@
                 <form class="space-y-6 cyber-card p-8 md:p-12 bg-black/50 backdrop-blur-lg">
                     <div class="grid md:grid-cols-2 gap-6">
                         <div class="space-y-2">
-                            <label class="text-xs text-gray-400 font-mono">USER_ID</label>
-                            <input id="join-name" type="text" class="w-full bg-gray-900 border border-gray-700 text-white p-3 focus:border-white focus:outline-none font-mono" placeholder="Name">
+                            <label class="text-xs text-gray-400 font-mono">NAME</label>
+                            <input id="join-name" type="text" class="w-full bg-gray-900 border border-gray-700 text-white p-3 focus:border-white focus:outline-none font-mono" placeholder="Full name">
                         </div>
                         <div class="space-y-2">
-                            <label class="text-xs text-gray-400 font-mono">COMM_CHANNEL</label>
-                            <input id="join-email" type="email" class="w-full bg-gray-900 border border-gray-700 text-white p-3 focus:border-white focus:outline-none font-mono" placeholder="Email">
+                            <label class="text-xs text-gray-400 font-mono">COLLEGE_EMAIL</label>
+                            <input id="join-email" type="email" class="w-full bg-gray-900 border border-gray-700 text-white p-3 focus:border-white focus:outline-none font-mono" placeholder="name@college.edu">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs text-gray-400 font-mono">REGISTRATION_NO</label>
+                            <input id="join-reg" type="text" class="w-full bg-gray-900 border border-gray-700 text-white p-3 focus:border-white focus:outline-none font-mono" placeholder="Registration number">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs text-gray-400 font-mono">YEAR</label>
+                            <select id="join-year" class="w-full bg-gray-900 border border-gray-700 text-white p-3 focus:border-white focus:outline-none font-mono">
+                                <option value="" disabled selected>Select year</option>
+                                <option value="1st">1st</option>
+                                <option value="2nd">2nd</option>
+                                <option value="3rd">3rd</option>
+                                <option value="4th">4th</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs text-gray-400 font-mono">COURSE</label>
+                            <select id="join-course" class="w-full bg-gray-900 border border-gray-700 text-white p-3 focus:border-white focus:outline-none font-mono">
+                                <option value="" disabled selected>Select course</option>
+                                <option value="Core">Core</option>
+                                <option value="AIML">AIML</option>
+                                <option value="Cybersecurity">Cybersecurity</option>
+                                <option value="Cloud Computing">Cloud Computing</option>
+                                <option value="Data Science">Data Science</option>
+                                <option value="DS-BS">DS-BS</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs text-gray-400 font-mono">SECTION</label>
+                            <input id="join-section" type="text" class="w-full bg-gray-900 border border-gray-700 text-white p-3 focus:border-white focus:outline-none font-mono" placeholder="Section">
                         </div>
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-xs text-gray-400 font-mono">DATA_PACKET</label>
-                        <textarea id="join-message" class="w-full bg-gray-900 border border-gray-700 text-white p-3 focus:border-white focus:outline-none font-mono h-32" placeholder="Message..."></textarea>
+                    <div class="space-y-3">
+                        <label class="text-xs text-gray-400 font-mono">INTERESTED_TEAMS</label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm text-gray-300 font-mono">
+                            <label class="flex items-center gap-2">
+                                <input type="checkbox" name="teams" value="Cybersecurity" class="accent-white">Cybersecurity
+                            </label>
+                            <label class="flex items-center gap-2">
+                                <input type="checkbox" name="teams" value="Developer" class="accent-white">Developer
+                            </label>
+                            <label class="flex items-center gap-2">
+                                <input type="checkbox" name="teams" value="IT" class="accent-white">IT
+                            </label>
+                            <label class="flex items-center gap-2">
+                                <input type="checkbox" name="teams" value="Management" class="accent-white">Management
+                            </label>
+                            <label class="flex items-center gap-2">
+                                <input type="checkbox" name="teams" value="Creative" class="accent-white">Creative
+                            </label>
+                            <label class="flex items-center gap-2">
+                                <input type="checkbox" name="teams" value="PR" class="accent-white">PR
+                            </label>
+                        </div>
                     </div>
                     <button id="join-submit" type="button" class="w-full bg-white text-black font-bold font-mono py-3 hover:bg-gray-300 transition-colors uppercase tracking-widest clip-path-polygon">
                         Transmit Data
@@ -352,21 +401,34 @@
             joinButton.addEventListener('click', () => {
                 const nameInput = document.getElementById('join-name');
                 const emailInput = document.getElementById('join-email');
-                const messageInput = document.getElementById('join-message');
+                const regInput = document.getElementById('join-reg');
+                const yearInput = document.getElementById('join-year');
+                const courseInput = document.getElementById('join-course');
+                const sectionInput = document.getElementById('join-section');
+                const selectedTeams = Array.from(document.querySelectorAll('input[name="teams"]:checked'));
 
                 const name = nameInput ? nameInput.value.trim() : '';
                 const email = emailInput ? emailInput.value.trim() : '';
-                const message = messageInput ? messageInput.value.trim() : '';
+                const reg = regInput ? regInput.value.trim() : '';
+                const year = yearInput ? yearInput.value.trim() : '';
+                const courseValue = courseInput ? courseInput.value.trim() : '';
+                const sectionValue = sectionInput ? sectionInput.value.trim() : '';
 
-                if (!name || !email || !message) {
-                    alert('Complete all fields before transmission.');
+                if (!name || !email || !reg || !year || !courseValue || !sectionValue || selectedTeams.length === 0) {
+                    alert('Complete all fields and select at least one team.');
                     return;
                 }
 
                 alert('Transmission received. Stand by for response.');
                 if (nameInput) nameInput.value = '';
                 if (emailInput) emailInput.value = '';
-                if (messageInput) messageInput.value = '';
+                if (regInput) regInput.value = '';
+                if (yearInput) yearInput.value = '';
+                if (courseInput) courseInput.value = '';
+                if (sectionInput) sectionInput.value = '';
+                document.querySelectorAll('input[name="teams"]').forEach(box => {
+                    box.checked = false;
+                });
             });
         }
 
